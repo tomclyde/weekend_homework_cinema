@@ -36,3 +36,10 @@ ticket2.save
 ticket3.save
 ticket4.save
 ticket5.save
+
+film4.price = 18.50
+film4.update
+customer1.funds = 200.00
+customer1.update
+ticket1.customer_id = customer3.id
+ticket1.update
