@@ -81,4 +81,17 @@ class Customer
     return films
   end
 
+  def buy_ticket(film_id)
+    sql = "UPDATE customers
+    SET funds = funds - (SELECT sum(price)
+        FROM films
+        INNER JOIN tickets
+        ON tickets.customer_id = $1
+        WHERE tickets.film_id = film_id
+        AND films.id = film_id)
+    WHERE customers.id = $1"
+    values = [@id]
+    SqlRunner.run(sql, values)
+  end
+
 end

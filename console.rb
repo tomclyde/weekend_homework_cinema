@@ -27,7 +27,7 @@ customer3.save
 
 ticket1 = Ticket.new({'film_id' => film1.id, 'customer_id' => customer1.id})
 ticket2 = Ticket.new({'film_id' => film1.id, 'customer_id' => customer1.id})
-ticket3 = Ticket.new({'film_id' => film1.id, 'customer_id' => customer2.id})
+ticket3 = Ticket.new({'film_id' => film2.id, 'customer_id' => customer2.id})
 ticket4 = Ticket.new({'film_id' => film2.id, 'customer_id' => customer2.id})
 ticket5 = Ticket.new({'film_id' => film4.id, 'customer_id' => customer2.id})
 
@@ -43,6 +43,8 @@ customer1.funds = 200.00
 customer1.update
 ticket1.customer_id = customer3.id
 ticket1.update
+
+customer1.buy_ticket(1)
 
 binding.pry
 nil
