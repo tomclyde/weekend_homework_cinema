@@ -68,7 +68,7 @@ class Film
     results = SqlRunner.run(sql, values)
     film_hash = results.first
     film = Film.new(film_hash)
-    return customer
+    return film
   end
 
 end
