@@ -71,4 +71,14 @@ class Customer
     return customer
   end
 
+  def films_booked
+    sql = "SELECT films.* FROM films, tickets
+           WHERE tickets.customer_id = $1
+           AND tickets.film_id = films.id"
+    values = [@id]
+    results = SqlRunner.run(sql, values)
+    films = results.map { |result| Film.new( result ) }
+    return films
+  end
+
 end

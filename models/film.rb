@@ -71,4 +71,14 @@ class Film
     return film
   end
 
+  def customers_viewing
+    sql = "SELECT customers.* FROM customers, tickets
+           WHERE tickets.film_id = $1
+           AND tickets.customer_id = customers.id"
+    values = [@id]
+    results = SqlRunner.run(sql, values)
+    customers = results.map { |result| Customer.new( result ) }
+    return customers
+  end
+
 end
