@@ -81,4 +81,11 @@ class Film
     return customers
   end
 
+  def count_of_customers_viewing
+    sql = "SELECT count(distinct (customers.*)) FROM customers, tickets
+           WHERE tickets.film_id = $1
+           AND tickets.customer_id = customers.id"
+    values = [@id]
+    return SqlRunner.run(sql, values).first['count'].to_i
+  end
 end
