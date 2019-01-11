@@ -94,4 +94,12 @@ class Customer
     SqlRunner.run(sql, values)
   end
 
+  def check_no_tickets_bought
+    sql = "SELECT COUNT(tickets.*)
+          FROM tickets
+          WHERE tickets.customer_id = $1"
+    values = [@id]
+    return SqlRunner.run(sql, values).first['count'].to_i
+  end
+
 end
