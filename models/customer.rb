@@ -86,8 +86,11 @@ class Customer
            WHERE screenings.id = $1"
     values = [screening_id]
     tickets_left =  SqlRunner.run(sql, values).first['tickets_available'].to_i
+
     if tickets_left > 0
         if check_customer_has_enough_funds(film_id)
+          Ticket.new({'customer_id' => @id, 'film_id' => film_id,
+                      'screening_id' => screening_id}).save()
           sql = "UPDATE customers
           SET funds = funds - (SELECT sum(price)
               FROM films
@@ -98,7 +101,10 @@ class Customer
               WHERE customers.id = $1"
           values = [@id, film_id]
           SqlRunner.run(sql, values)
+        else
+          return nil
         end
+    else return nil
     end
   end
 

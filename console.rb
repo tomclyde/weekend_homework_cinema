@@ -27,7 +27,7 @@ customer2.save
 customer3.save
 
 screening1 = Screening.new({'film_id' => film1.id,
-                            'screening_time' => '12:00', 'tickets_available' => 0})
+                            'screening_time' => '12:00', 'tickets_available' => 10})
 
 screening2 = Screening.new({'film_id' => film1.id,
                             'screening_time' => '12:00', 'tickets_available' => 20})
