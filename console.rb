@@ -2,6 +2,7 @@ require("pry-byebug")
 require_relative("./models/film")
 require_relative("./models/customer")
 require_relative("./models/ticket")
+require_relative("./models/screening")
 
 
 Film.delete_all()
@@ -25,11 +26,38 @@ customer1.save
 customer2.save
 customer3.save
 
-ticket1 = Ticket.new({'film_id' => film1.id, 'customer_id' => customer1.id})
-ticket2 = Ticket.new({'film_id' => film1.id, 'customer_id' => customer1.id})
-ticket3 = Ticket.new({'film_id' => film2.id, 'customer_id' => customer2.id})
-ticket4 = Ticket.new({'film_id' => film2.id, 'customer_id' => customer2.id})
-ticket5 = Ticket.new({'film_id' => film4.id, 'customer_id' => customer2.id})
+screening1 = Screening.new({'film_id' => film1.id,
+                            'screening_time' => '12:00', 'tickets_available' => 0})
+
+screening2 = Screening.new({'film_id' => film1.id,
+                            'screening_time' => '12:00', 'tickets_available' => 20})
+
+screening3 = Screening.new({'film_id' => film1.id,
+                            'screening_time' => '15:00', 'tickets_available' => 20})
+
+screening4 = Screening.new({'film_id' => film2.id,
+                            'screening_time' => '19:00', 'tickets_available' => 20})
+
+screening5 = Screening.new({'film_id' => film2.id,
+                            'screening_time' => '21:00', 'tickets_available' => 2})
+
+
+screening1.save
+screening2.save
+screening3.save
+screening4.save
+screening5.save
+
+ticket1 = Ticket.new({'film_id' => film1.id, 'customer_id' => customer1.id,
+                      'screening_id' => screening1.id})
+ticket2 = Ticket.new({'film_id' => film1.id, 'customer_id' => customer1.id,
+                      'screening_id' => screening1.id})
+ticket3 = Ticket.new({'film_id' => film1.id, 'customer_id' => customer2.id,
+                      'screening_id' => screening2.id})
+ticket4 = Ticket.new({'film_id' => film2.id, 'customer_id' => customer2.id,
+                      'screening_id' => screening4.id})
+ticket5 = Ticket.new({'film_id' => film2.id, 'customer_id' => customer2.id,
+                      'screening_id' => screening5.id})
 
 ticket1.save
 ticket2.save
@@ -37,14 +65,11 @@ ticket3.save
 ticket4.save
 ticket5.save
 
-film4.price = 18.50
-film4.update
-customer1.funds = 200.00
-customer1.update
-ticket1.customer_id = customer3.id
-ticket1.update
 
-customer1.buy_ticket(1)
+customer1.buy_ticket(1,1)
+
+
+
 
 binding.pry
 nil

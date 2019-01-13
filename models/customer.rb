@@ -81,17 +81,25 @@ class Customer
     return films
   end
 
-  def buy_ticket(film_id)
-    sql = "UPDATE customers
-    SET funds = funds - (SELECT sum(price)
-        FROM films
-        INNER JOIN tickets
-        ON tickets.customer_id = $1
-        WHERE tickets.film_id = film_id
-        AND films.id = film_id)
-    WHERE customers.id = $1"
-    values = [@id]
-    SqlRunner.run(sql, values)
+  def buy_ticket(film_id, screening_id)
+    sql = "SELECT tickets_available from screenings
+           WHERE screenings.id = $1"
+    values = [screening_id]
+    tickets_left =  SqlRunner.run(sql, values).first['tickets_available'].to_i
+    if tickets_left > 0
+        if check_customer_has_enough_funds(film_id)
+          sql = "UPDATE customers
+          SET funds = funds - (SELECT sum(price)
+              FROM films
+              INNER JOIN tickets
+              ON tickets.customer_id = $1
+              WHERE tickets.film_id = $2
+              AND films.id = $2)
+              WHERE customers.id = $1"
+          values = [@id, film_id]
+          SqlRunner.run(sql, values)
+        end
+    end
   end
 
   def check_no_tickets_bought
@@ -101,5 +109,26 @@ class Customer
     values = [@id]
     return SqlRunner.run(sql, values).first['count'].to_i
   end
+
+  def check_customer_has_enough_funds(film_id)
+    sql = "SELECT customers.funds FROM customers
+            WHERE customers.id = $1"
+    values = [@id]
+    funds =  SqlRunner.run(sql, values).first['funds'].to_f
+    p funds
+
+    sql = "SELECT films.price FROM films
+            WHERE films.id = $1"
+    values = [film_id]
+    price =  SqlRunner.run(sql, values).first['price'].to_f
+    p price
+
+    if funds >= price
+      return true
+    else
+      return false
+    end
+  end
+
 
 end

@@ -88,4 +88,14 @@ class Film
     values = [@id]
     return SqlRunner.run(sql, values).first['count'].to_i
   end
+
+  def most_popular_time
+    sql ="SELECT count(screenings.*),screenings.screening_time
+          FROM screenings, films
+          WHERE screenings.film_id = $1
+          AND films.id = $1
+          GROUP by screenings.screening_time"
+          values = [@id]
+    return SqlRunner.run(sql, values).first['screening_time']
+  end
 end
